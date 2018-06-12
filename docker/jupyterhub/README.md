@@ -1,6 +1,6 @@
 Build the Image
 ===============
-1. make sure msdk/anaconda3 image is installed on docker
+1. make sure bmtk/anaconda3 image is installed on docker
 ```bash
   $ docker images
 ```
@@ -8,15 +8,15 @@ If it is not installed go to ../anaconda3_base and follow instructions there.
 
 2. Run the following command
 ```bash
-  $ docker build -t msdk/jupyter .
+  $ docker build -t bmtk/jupyter .
 ```
 
 
 Start Jupyter Hub
 =================
+From the root directory run 
 ```bash
-  $ mkdir saved
-  $ docker run -v $(pwd)/saved:/home/user/workdir/saved -p 8000:8000 msdk/jupyter
+  $ docker run -v $(pwd)/bmtk:/home/user/workdir/bmtk -p 8000:8000 bmtk/jupyter
 ```
 Open a browser and go to http:127.0.0.1:8000
 

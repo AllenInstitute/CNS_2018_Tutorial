@@ -1,6 +1,7 @@
 FROM bmtk/anaconda3
 MAINTAINER Kael Dai <kaeld@alleninstitute.org>
 
+ENV PYTHON_ENV=python3.6
 
 RUN /bin/bash --login -c "source activate bmtk; \
     wget https://github.com/AllenInstitute/AllenSDK/archive/v0.13.1.tar.gz; \
@@ -10,9 +11,6 @@ RUN /bin/bash --login -c "source activate bmtk; \
     python setup.py develop"
 
 
-# RUN apt-get install -y npm vim; \
-#     npm install n -g; \
-#     n 4.5.0; \
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs; \
     npm install n -g; \
@@ -33,9 +31,17 @@ RUN useradd user; \
     mkdir /home/user; \
     mkdir /home/user/workdir; \
     mkdir /home/user/workdir/saved; \
-    cp -R /home/build/bmtk/docs/examples /home/user/workdir/modelingsdk_examples; \
+#    cp -R /home/build/bmtk/docs/examples /home/user/workdir/modelingsdk_examples; \
     cp -R /home//build/allensdk/doc_template/examples /home/user/workdir/allensdk_examples; \
     chown -R user.user /home/user
+
+# Need to import mod files and compile NEURON mechanisms
+RUN mkdir /home/user/workdir/bmtk; \
+    mkdir -p /home/user/workdir/neuron_mechanisms/modfiles
+COPY ./mechanisms/modfiles/*.mod /home/user/workdir/neuron_mechanisms/modfiles/
+RUN /bin/bash --login -c "source activate bmtk; \
+    cd /home/user/workdir/neuron_mechanisms; \
+    /home/shared/x86_64/bin/nrnivmodl modfiles"
 
 # Install modelingsdk environment kernel
 RUN conda install nb_conda
@@ -54,7 +60,7 @@ ENV NEST_INSTALL_DIR=/home/shared/nest
 ENV NEST_DATA_DIR=${NEST_INSTALL_DIR}/share/nest
 ENV NEST_DOC_DIR=${NEST_INSTALL_DIR}/share/doc/nest
 ENV NEST_MODULE_PATH=${NEST_INSTALL_DIR}/lib/nest
-ENV NEST_PYTHON_PREFIX=${NEST_INSTALL_DIR}/lib/python2.7/site-packages
+ENV NEST_PYTHON_PREFIX=${NEST_INSTALL_DIR}/lib/${PYTHON_ENV}/site-packages
 ENV PYTHONPATH=${NEST_PYTHON_PREFIX}:${PYTHONPATH}
 ENV PATH=${NEST_INSTALL_DIR}/bin:$PATH
 

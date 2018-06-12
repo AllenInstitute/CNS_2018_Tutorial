@@ -10,7 +10,7 @@ or alteratively download the tar.gz file from  http://stash.corp.alleninstitute.
 
 2. Run the docker build command to turn the image into a container
 ```bash
-  $ docker build -t msdk/anaconda3 .
+  $ docker build -t bmtk/anaconda3 .
 ```
 
 The -t parameter is used for the name the container. Feel free to change it as you please.
@@ -28,7 +28,7 @@ Run the image
 
 1. Log into the docker image by running the command
 ```bash
-  $ docker run -i -t msdk/anaconda3 /bin/bash
+  $ docker run -i -t bmtk/anaconda3 /bin/bash
 ```
 
 Once in side the terminal, you will have access to nest and NEURON, and the modelingsdk with all dependencies will be installed into python. 
