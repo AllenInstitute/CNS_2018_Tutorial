@@ -44,24 +44,9 @@ RUN ./build_DiPDE.sh --conda-env bmtk
 # RUN ./build_Tensorflow.sh --conda-env bmtk
 
 
-# Install bmtk
-ENV BMTK_HOME=${BUILD_DIR}/bmtk
-RUN mkdir -p ${BMTK_HOME}
-COPY ./bmtk*.tar.gz ${BMTK_HOME}/bmtk.tar.gz
-
-
-# Installs API in python
+# Installs bmtk develop
 RUN /bin/bash --login -c "source activate bmtk; \
-	cd ${BMTK_HOME}; \
-    tar xfz bmtk.tar.gz --strip-components 1; \
+	git clone --branch release/workshop2018 https://github.com/AllenInstitute/bmtk.git; \
+	cd bmtk; \
     python setup.py develop"
 
-# Compiles the neuron mechanisms for the bionet examples. May be better to let users do this step???    
-# RUN /bin/bash --login -c "source activate bmtk; \
-#	cd ${BMTK_HOME}/docs/examples/simulator/bionet/components/mechanisms; \
-#	/home/shared/x86_64/bin/nrnivmodl modfiles"
-
-# Tests for bmtk
-#COPY test_msdk.sh .
-#RUN chmod +x test_msdk.sh
-#CMD ["/home/build/test_msdk.sh"]

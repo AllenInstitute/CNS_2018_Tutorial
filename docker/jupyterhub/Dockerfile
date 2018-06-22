@@ -31,26 +31,33 @@ RUN useradd user; \
     mkdir /home/user; \
     mkdir /home/user/workdir; \
     mkdir /home/user/workdir/saved; \
-#    cp -R /home/build/bmtk/docs/examples /home/user/workdir/modelingsdk_examples; \
-    cp -R /home//build/allensdk/doc_template/examples /home/user/workdir/allensdk_examples; \
+    cp -R /home/build/allensdk/doc_template/examples /home/user/workdir/allensdk_examples; \
     chown -R user.user /home/user
 
 # Need to import mod files and compile NEURON mechanisms
-RUN mkdir /home/user/workdir/bmtk; \
-    mkdir -p /home/user/workdir/neuron_mechanisms/modfiles
+RUN mkdir -p /home/user/workdir/neuron_mechanisms/modfiles
+
+# TODO: Change kaeldai repo to appropiate one
+RUN cd /home/shared; \
+    git clone https://github.com/kaeldai/CNS_2018_Tutorial; \
+    cp -r CNS_2018_Tutorial/bmtk /home/user/workdir; \
+    cp -r CNS_2018_Tutorial/resources /home/user/workdir; \
+    chown -R user.user /home/user/workdir/bmtk
+
+RUN /bin/bash --login -c "source activate bmtk; \
+    cd /home/user/workdir/bmtk/biophysical_notebook/components/mechanisms; \
+    /home/shared/x86_64/bin/nrnivmodl modfiles"
+
+# For testing and development, should remove
 COPY ./mechanisms/modfiles/*.mod /home/user/workdir/neuron_mechanisms/modfiles/
 RUN /bin/bash --login -c "source activate bmtk; \
     cd /home/user/workdir/neuron_mechanisms; \
     /home/shared/x86_64/bin/nrnivmodl modfiles"
 
-# Install modelingsdk environment kernel
+# Install bmtk environment kernel
 RUN conda install nb_conda
 RUN /bin/bash --login -c "source activate bmtk; \
     conda install -y jupyter ipython ipykernel; \
-#   python -m ipykernel install; \
-#    ipython kernel install; \
-#    source activate root; \
-#    source activate base; \
     python -m ipykernel install --user --name bmkt --display-name 'bmtk'"
 
 EXPOSE 8888

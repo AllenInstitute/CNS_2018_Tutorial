@@ -14,7 +14,13 @@ If it is not installed go to ../anaconda3_base and follow instructions there.
 
 Start Jupyter Hub
 =================
+To test with normal AWS behavior
 From the root directory run 
+```bash
+  $ docker run -p 8000:8000 bmtk/jupyter
+```
+
+To work on it in develop/testing mode (and have it save your notebooks), from the root directory run 
 ```bash
   $ docker run -v $(pwd)/bmtk:/home/user/workdir/bmtk -p 8000:8000 bmtk/jupyter
 ```
