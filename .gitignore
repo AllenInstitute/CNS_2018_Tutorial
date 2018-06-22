@@ -1,3 +1,6 @@
 **/.ipynb_checkpoints
 bmtk/**/output/
 bmtk/biophysical_notebook/components/mechanisms/x86_64
+bmtk/**/network/
+!bmtk/pointnet_notebook/network
+**/*.*~
