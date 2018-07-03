@@ -1,0 +1,3 @@
+node_type_id dynamics_params model_type model_template pop_name ei
+100 excitatory_pop.json population dipde:Internal excitatory e
+101 inhibitory_pop.json population dipde:Internal inhibitory i

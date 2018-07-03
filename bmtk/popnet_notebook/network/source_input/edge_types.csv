@@ -1,0 +1,2 @@
+edge_type_id target_query source_query syn_weight nsyns delay dynamics_params
+100 pop_name=='inhibitory' pop_name=='excitatory' 0.005 20 0.002 ExcToInh.json
