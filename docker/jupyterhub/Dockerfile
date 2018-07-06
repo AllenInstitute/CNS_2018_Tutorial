@@ -3,13 +3,12 @@ MAINTAINER Kael Dai <kaeld@alleninstitute.org>
 
 ENV PYTHON_ENV=python3.6
 
-RUN /bin/bash --login -c "source activate bmtk; \
-    wget https://github.com/AllenInstitute/AllenSDK/archive/v0.13.1.tar.gz; \
-    tar xvzf v0.13.1.tar.gz; \
-    mv AllenSDK-0.13.1 allensdk; \
-    cd allensdk; \
-    python setup.py develop"
+RUN conda create -n py27 python=2.7 anaconda; \
+    conda activate py27; \
+    pip install allensdk
 
+RUN /bin/bash --login -c "source activate bmtk; \
+    pip install allensdk"
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs; \
@@ -70,5 +69,3 @@ ENV NEST_MODULE_PATH=${NEST_INSTALL_DIR}/lib/nest
 ENV NEST_PYTHON_PREFIX=${NEST_INSTALL_DIR}/lib/${PYTHON_ENV}/site-packages
 ENV PYTHONPATH=${NEST_PYTHON_PREFIX}:${PYTHONPATH}
 ENV PATH=${NEST_INSTALL_DIR}/bin:$PATH
-
-CMD ["jupyterhub", "--ip=0.0.0.0", "--Spawner.notebook_dir=workdir"]
