@@ -1,11 +1,13 @@
 FROM bmtk/anaconda3
 MAINTAINER Kael Dai <kaeld@alleninstitute.org>
 
-ENV PYTHON_ENV=python3.6
+ENV PYTHON_VER=2.7
+ENV PYTHON_ENV=python${PYTHON_VER}
 
-RUN conda create -n py27 python=2.7 anaconda; \
-    conda activate py27; \
-    pip install allensdk
+
+#RUN conda create -n py27 python=2.7 anaconda; \
+#    conda activate py27; \
+#    pip install allensdk
 
 RUN /bin/bash --login -c "source activate bmtk; \
     pip install allensdk"
@@ -69,3 +71,5 @@ ENV NEST_MODULE_PATH=${NEST_INSTALL_DIR}/lib/nest
 ENV NEST_PYTHON_PREFIX=${NEST_INSTALL_DIR}/lib/${PYTHON_ENV}/site-packages
 ENV PYTHONPATH=${NEST_PYTHON_PREFIX}:${PYTHONPATH}
 ENV PATH=${NEST_INSTALL_DIR}/bin:$PATH
+
+# CMD ["jupyterhub", "--ip=0.0.0.0", "--Spawner.notebook_dir=workdir"]

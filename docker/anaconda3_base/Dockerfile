@@ -4,7 +4,7 @@ MAINTAINER Kael Dai <kaeld@alleninstitute.org>
 
 # TODO: look into getting ARCH from 'arch' command
 ARG ARCH=x86_64
-ARG PY_VER=3.6
+ARG PY_VER=2.7
 
 RUN apt-get update && apt-get install -y -qq \ 
 		automake \ 
@@ -24,7 +24,7 @@ WORKDIR ${BUILD_DIR}
 COPY build_scripts/*.sh ./
 RUN chmod +x *.sh
 
-RUN conda create -y -q --name bmtk python=$PY_VER pandas h5py
+RUN conda create -y -q --name bmtk python=${PY_VER} pandas h5py
 
 
 # Install NEURON 
@@ -33,7 +33,7 @@ ENV PATH="${PATH}:${INSTALL_DIR}/$ARCH/bin"
 
 
 # Install NEST
-RUN ./build_NEST.sh --build-path ${BUILD_DIR} --install-path ${INSTALL_DIR} --with-nest_vars --conda-env bmtk
+RUN ./build_NEST.sh --build-path ${BUILD_DIR} --install-path ${INSTALL_DIR} --with-nest_vars --conda-env bmtk --pythons ${PY_VER}
 
 
 # Install Dipde
