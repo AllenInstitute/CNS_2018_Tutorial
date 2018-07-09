@@ -5,10 +5,6 @@ ENV PYTHON_VER=2.7
 ENV PYTHON_ENV=python${PYTHON_VER}
 
 
-#RUN conda create -n py27 python=2.7 anaconda; \
-#    conda activate py27; \
-#    pip install allensdk
-
 RUN /bin/bash --login -c "source activate bmtk; \
     pip install allensdk"
 
@@ -26,33 +22,28 @@ RUN apt-get install -y nodejs; \
     pip install -r requirements.txt; \
     pip install .
 
-# Create a user
-RUN useradd user; \
-    echo 'user:user' | chpasswd; \
-    mkdir /home/user; \
-    mkdir /home/user/workdir; \
-    mkdir /home/user/workdir/saved; \
-    cp -R /home/build/allensdk/doc_template/examples /home/user/workdir/allensdk_examples; \
-    chown -R user.user /home/user
 
-# Need to import mod files and compile NEURON mechanisms
-RUN mkdir -p /home/user/workdir/neuron_mechanisms/modfiles
+RUN mkdir /home/shared/user_workdir
+RUN cp -R /home/build/allensdk/doc_template/examples /home/shared/user_workdir/allensdk_examples;
+RUN mkdir /home/shared/user_workdir/saved;
+RUN mkdir -p /home/shared/user_workdir/neuron_mechanisms/modfiles
+
 
 # TODO: Change kaeldai repo to appropiate one
 RUN cd /home/shared; \
     git clone https://github.com/kaeldai/CNS_2018_Tutorial; \
-    cp -r CNS_2018_Tutorial/bmtk /home/user/workdir; \
-    cp -r CNS_2018_Tutorial/resources /home/user/workdir; \
-    chown -R user.user /home/user/workdir/bmtk
+    cp -r CNS_2018_Tutorial/bmtk /home/shared/user_workdir; \
+    cp -r CNS_2018_Tutorial/resources /home/shared/user_workdir; \
 
+    
 RUN /bin/bash --login -c "source activate bmtk; \
-    cd /home/user/workdir/bmtk/biophysical_notebook/components/mechanisms; \
+    cd /home/shared/user_workdir/bmtk/biophysical_notebook/components/mechanisms; \
     /home/shared/x86_64/bin/nrnivmodl modfiles"
 
 # For testing and development, should remove
-COPY ./mechanisms/modfiles/*.mod /home/user/workdir/neuron_mechanisms/modfiles/
+COPY ./mechanisms/modfiles/*.mod /home/shared/user_workdir/neuron_mechanisms/modfiles/
 RUN /bin/bash --login -c "source activate bmtk; \
-    cd /home/user/workdir/neuron_mechanisms; \
+    cd /home/shared/user_workdir/neuron_mechanisms; \
     /home/shared/x86_64/bin/nrnivmodl modfiles"
 
 # Install bmtk environment kernel
@@ -71,5 +62,3 @@ ENV NEST_MODULE_PATH=${NEST_INSTALL_DIR}/lib/nest
 ENV NEST_PYTHON_PREFIX=${NEST_INSTALL_DIR}/lib/${PYTHON_ENV}/site-packages
 ENV PYTHONPATH=${NEST_PYTHON_PREFIX}:${PYTHONPATH}
 ENV PATH=${NEST_INSTALL_DIR}/bin:$PATH
-
-# CMD ["jupyterhub", "--ip=0.0.0.0", "--Spawner.notebook_dir=workdir"]
