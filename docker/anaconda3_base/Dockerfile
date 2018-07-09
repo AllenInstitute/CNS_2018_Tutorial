@@ -48,5 +48,5 @@ RUN ./build_DiPDE.sh --conda-env bmtk
 RUN /bin/bash --login -c "source activate bmtk; \
 	git clone --branch release/workshop2018 https://github.com/AllenInstitute/bmtk.git; \
 	cd bmtk; \
-    python setup.py develop"
+    python setup.py install"
 
