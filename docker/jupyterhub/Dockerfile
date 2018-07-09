@@ -6,6 +6,7 @@ ENV PYTHON_ENV=python${PYTHON_VER}
 
 
 RUN /bin/bash --login -c "source activate bmtk; \
+    pip install tables; \
     pip install allensdk"
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -32,7 +33,7 @@ RUN cd /home/shared; \
     git clone https://github.com/AllenInstitute/CNS_2018_Tutorial; \
     cp -r CNS_2018_Tutorial/bmtk /home/shared/user_workdir; \
     cp -r CNS_2018_Tutorial/resources /home/shared/user_workdir; \
-    cp -r CNS_2018_Tutorial/BrainObservatory /home/shared/user_workdir;
+    cp -r CNS_2018_Tutorial/BrainObservatory /home/shared/user_workdir
 
 
 RUN /bin/bash --login -c "source activate bmtk; \
