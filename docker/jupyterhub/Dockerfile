@@ -24,18 +24,17 @@ RUN apt-get install -y nodejs; \
 
 
 RUN mkdir /home/shared/user_workdir
-RUN cp -R /home/build/allensdk/doc_template/examples /home/shared/user_workdir/allensdk_examples;
 RUN mkdir /home/shared/user_workdir/saved;
 RUN mkdir -p /home/shared/user_workdir/neuron_mechanisms/modfiles
 
 
-# TODO: Change kaeldai repo to appropiate one
 RUN cd /home/shared; \
-    git clone https://github.com/kaeldai/CNS_2018_Tutorial; \
+    git clone https://github.com/AllenInstitute/CNS_2018_Tutorial; \
     cp -r CNS_2018_Tutorial/bmtk /home/shared/user_workdir; \
     cp -r CNS_2018_Tutorial/resources /home/shared/user_workdir; \
+    cp -r CNS_2018_Tutorial/BrainObservatory /home/shared/user_workdir;
 
-    
+
 RUN /bin/bash --login -c "source activate bmtk; \
     cd /home/shared/user_workdir/bmtk/biophysical_notebook/components/mechanisms; \
     /home/shared/x86_64/bin/nrnivmodl modfiles"
